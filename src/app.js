@@ -1,0 +1,48 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import { connectDb } from "./config/mongoDbConnection.js";
+import { AuthRouter } from "./routes/authRouter.js";
+import { BookRouter } from "./routes/bookRouter.js";
+import { authMiddleware } from "./middlewares/authMiddleware.js";
+import { errorHandler } from "./middlewares/errorMiddleware.js";
+import morgan from "morgan";
+
+const server = express();
+
+server.use(cors());
+server.use(express.json());
+server.use(morgan("dev"));
+
+const PORT = process.env.PORT;
+
+// Status
+server.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API REST con Express y MongoDB",
+  });
+});
+
+server.use("/api/auth", AuthRouter);
+
+server.use(authMiddleware);
+
+server.use("/api/books", BookRouter);
+
+server.use(errorHandler);
+
+const startServer = async () => {
+  try {
+    await connectDb();
+    server.listen(PORT, () => {
+      console.log(`Servidor en escucha por el puerto http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("No se pudo iniciar la aplicación");
+  }
+};
+
+startServer();
+
+export { server };
