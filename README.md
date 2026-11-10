@@ -284,7 +284,7 @@ Bruno POST Login
 Bruno GET all books admin
 Bruno GET all books user forbidden
 
-La colección de pruebas se encuentra en la carpeta `Backend PAI REST/` en la raíz del proyecto.
+La colección de pruebas se encuentra en la carpeta `Backend API REST/` en la raíz del proyecto.
 
 ---
 
